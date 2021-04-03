@@ -69,7 +69,7 @@ def remove_rofl_when_reply(message):
         if message.from_user.username == message.reply_to_message.json['from']['username']:
             bot.reply_to(message, 'ХАХА тут долбаеб сам себе минусы ставит')
         else:
-            random_rofl = randint(1,3)
+            random_rofl = randint(1,20)
             if random_rofl == 1:
                 bot.send_message(message.chat.id, 'Еееееебать! МЕГАМИНУС!')
                 bot.send_message(message.chat.id, '@' + message.from_user.username + ' залил МЕГАМИНУС ' + '@' + message.reply_to_message.json['from']['username'])
