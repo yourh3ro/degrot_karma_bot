@@ -16,6 +16,11 @@ def send_users_stat(message):
 def send_update(message):
 	bot.reply_to(message, "04.04.2021. Добавил Мегарофл, Мегаминус и Гучи линзы. Сделал казино с рандомным количеством рофлов. TODO: сделать ставки для казино. Хранить состояние, чтоб не спамили всякие Жени и не было голладского штурвала. Сделать ранги.")
 
+@bot.message_handler(commands=['github_link'])
+def send_update(message):
+	bot.reply_to(message, 'https://github.com/yourh3ro/degrot_karma_bot')
+
+
 @bot.message_handler(commands=['casino'])
 def casino(message):
     balance = db.get_roflanbalance_from_db(str(message.from_user.username))
