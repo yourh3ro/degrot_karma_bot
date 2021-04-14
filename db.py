@@ -1,69 +1,38 @@
 import sqlite3
 import tabulate
-
+import datetime
 
 
 connect = sqlite3.connect('db.db', check_same_thread=False)
-
 cursor = connect.cursor()
-
-cursor.execute("""CREATE TABLE IF NOT EXISTS users (
-            username text, 
-            roflancoins_balance int, 
-            given_plus_count int, 
-            given_minus_count int,
-            received_plus_count int,
-            received_minus_count int
-            )""")
-connect.commit()
-
 casino_admin = 'casino_admin'
 
-cursor.execute(f"INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)", (casino_admin, 0, 0, 0, 0, 0) )
+def start_bot():
+    cursor.execute("""CREATE TABLE IF NOT EXISTS users (
+                username text, 
+                roflancoins_balance int, 
+                given_plus_count int, 
+                given_minus_count int,
+                received_plus_count int,
+                received_minus_count int,
+                last_rofl_action text,
+                last_casino_action text
+                )""")
+    connect.commit()
 
-connect.commit()
-
-"""
-def add_rofl(username):
-
-    cursor.execute(f"SELECT username FROM users WHERE username = '{username}'")
+    cursor.execute(f"SELECT username FROM users WHERE username = '{casino_admin}'")
+    dt = datetime.datetime.now()
     if cursor.fetchone() is None:
-        print('User не существует!')
-        add_new_user_to_db(username)
-    else:
-        # get roflan balance and plus counts from db
-        for i in cursor.execute(f"SELECT roflancoins_balance, plus_count FROM users WHERE username = '{username}'"):
-            roflancoins_balance = i[0]
-            plus_count = i[1]
+        cursor.execute(f"INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (casino_admin, 1000, 0, 0, 0, 0, dt, dt) )
 
-        cursor.execute(f"UPDATE users SET roflancoins_balance = {roflancoins_balance + 1} WHERE username = '{username}'")
-        connect.commit()
-        cursor.execute(f"UPDATE users SET plus_count = {plus_count + 1} WHERE username = '{username}'")
-        connect.commit()
+    connect.commit()
 
-def remove_rofl(username):
-
-    cursor.execute(f"SELECT username FROM users WHERE username = '{username}'")
-    if cursor.fetchone() is None:
-        print('User не существует!')
-        add_new_user_to_db(username)
-    else:
-        # get roflan balance and minus counts from db
-        for i in cursor.execute(f"SELECT roflancoins_balance, minus_count FROM users WHERE username = '{username}'"):
-            roflancoins_balance = i[0]
-            minus_count = i[1]
-
-        cursor.execute(f"UPDATE users SET roflancoins_balance = {roflancoins_balance - 1} WHERE username = '{username}'")
-        connect.commit()
-        cursor.execute(f"UPDATE users SET minus_count = {minus_count + 1} WHERE username = '{username}'")
-        connect.commit()
-"""
 
 def add_new_user_to_db(username):
-
-    cursor.execute(f"SELECT username FROM users WHERE username = '{username}'")
+    cursor.execute(f"SELECT username FROM users WHERE username = '{username}'") 
+    dt = datetime.datetime.now()
     if cursor.fetchone() is None:
-        cursor.execute(f"INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)", (username, 0, 0, 0, 0, 0) )
+        cursor.execute(f"INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (username, 10, 0, 0, 0, 0, dt, dt) )
         connect.commit()
 
 def get_users_stat_from_db():
@@ -89,8 +58,14 @@ def get_one_user_stat_from_db(username):
 def get_roflanbalance_from_db(username):
     cursor.execute(f"SELECT roflancoins_balance FROM users WHERE username = '{username}'")
     balance = cursor.fetchone()
+    dt = datetime.datetime.now()
+    if balance is None:
+        cursor.execute(f"INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (username, 10, 0, 0, 0, 0, dt, dt) )
+        connect.commit()
+    cursor.execute(f"SELECT roflancoins_balance FROM users WHERE username = '{username}'")
+    balance = cursor.fetchone()
     balance = int(balance[0])
-
+    
     return balance
 
 
@@ -145,3 +120,34 @@ def db_remove_rofl(from_user, to_user, count):
 
         cursor.execute(f"UPDATE users SET given_minus_count = {given_minus_count + count} WHERE username = '{from_user}'")
         connect.commit()
+
+def db_upgrade_rofl_time(username):
+
+    now_time = datetime.datetime.now()
+
+    cursor.execute(f"UPDATE users SET last_rofl_action = '{now_time}' WHERE username = '{username}'")
+    connect.commit()
+
+def db_upgrade_casino_time(username):
+
+    now_time = datetime.datetime.now()
+
+    cursor.execute(f"UPDATE users SET last_casino_action = '{now_time}' WHERE username = '{username}'")
+    connect.commit()
+    
+def db_get_rofl_time(username):
+
+    cursor.execute(f"SELECT last_rofl_action FROM users WHERE username = '{username}'")
+    last_casino_action = cursor.fetchone()
+
+    return last_rofl_action
+
+def db_get_casino_time(username):
+
+    cursor.execute(f"SELECT last_casino_action FROM users WHERE username = '{username}'")
+    last_casino_action = cursor.fetchone()
+
+    last_casino_action = last_casino_action[0]
+    last_casino_action = datetime.datetime.strptime(last_casino_action, '%Y-%m-%d %H:%M:%S.%f')
+
+    return last_casino_action
