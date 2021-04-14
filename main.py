@@ -111,59 +111,59 @@ def new_casino(message):
         balance = db.get_roflanbalance_from_db(str(message.from_user.username))
         if balance < rate:
             bot.send_message(message.chat.id, 'На что играть собрался? Не хватает рофлов')
-        if casino_action_succes_time > now_time:
-            time_to_casino = casino_action_succes_time - now_time
-            time_to_casino = str(time_to_casino)
-            bot.send_message(message.chat.id, f'РАНО БЛЯТЬ! жди {time_to_casino}')
-        else:
-            bot.reply_to(message, "Кручу... Верчу... Наебать хочу!")
-            time.sleep(2)
-            result_of_casino = randint(1,100)
-            roflan_count = rate
+            if casino_action_succes_time > now_time:
+                time_to_casino = casino_action_succes_time - now_time
+                time_to_casino = str(time_to_casino)
+                bot.send_message(message.chat.id, f'РАНО БЛЯТЬ! жди {time_to_casino}')
+            else:
+                bot.reply_to(message, "Кручу... Верчу... Наебать хочу!")
+                time.sleep(2)
+                result_of_casino = randint(1,100)
+                roflan_count = rate
 
-            array_of_procents_lose = []
-            array_of_procents_win = []
+                array_of_procents_lose = []
+                array_of_procents_win = []
 
-            i = 10
-            while i <= 40:
-                array_of_procents_lose.append(i)
-                i = i + 1
+                i = 10
+                while i <= 40:
+                    array_of_procents_lose.append(i)
+                    i = i + 1
 
-            q = 41
-            while q <= 100:
-                array_of_procents_win.append(q)
-                q = q + 1
+                q = 41
+                while q <= 100:
+                    array_of_procents_win.append(q)
+                    q = q + 1
 
-            if result_of_casino == 1 or result_of_casino == 2 or result_of_casino == 3 or result_of_casino == 4 or result_of_casino == 5:
-                bot.send_message(message.chat.id, f'Ты проебал все! -{str(balance)} рофлов')
-                bot.send_message(message.chat.id, f'СОСАТЬ! casino_admin +{str(balance)} рофлов')
-                db.db_remove_rofl(db.casino_admin, str(message.from_user.username), balance)
-                db.db_add_rofl(str(message.from_user.username), db.casino_admin, balance)
-                bot.send_message(message.chat.id, db.get_one_user_stat_from_db('casino_admin'), parse_mode='HTML')
-                bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.from_user.username)), parse_mode='HTML')
-            if result_of_casino == 6 or result_of_casino == 7 or result_of_casino == 8 or result_of_casino == 9 or result_of_casino == 10:
-                bot.send_message(message.chat.id, f'Ты проебал жизнь! -{str(balance * 2)} рофлов')
-                bot.send_message(message.chat.id, f'Твоя жизнь пренадлежит мне, еблан! casino_admin +{str(balance * 2)} рофлов')
-                db.db_remove_rofl(db.casino_admin, str(message.from_user.username), balance * 2)
-                db.db_add_rofl(str(message.from_user.username), db.casino_admin, balance * 2)
-                bot.send_message(message.chat.id, db.get_one_user_stat_from_db('casino_admin'), parse_mode='HTML')
-                bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.from_user.username)), parse_mode='HTML')
-            if result_of_casino in array_of_procents_win:
-                bot.send_message(message.chat.id, f'Ты выиграл! +{str(rate)} рофлов')
-                bot.send_message(message.chat.id, f'обокрал Казиныча на {str(rate)} рофлов')
-                db.db_add_rofl(db.casino_admin, str(message.from_user.username), rate)
-                db.db_remove_rofl(str(message.from_user.username), db.casino_admin, rate)
-                bot.send_message(message.chat.id, db.get_one_user_stat_from_db('casino_admin'), parse_mode='HTML')
-                bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.from_user.username)), parse_mode='HTML')
-            if result_of_casino in array_of_procents_lose:
-                bot.send_message(message.chat.id, f'Ты проиграл! -{str(rate)} рофлов')
-                bot.send_message(message.chat.id, f'Казиныч снова в выигрыше! casino_admin +{str(rate)} рофлов')
-                db.db_remove_rofl(db.casino_admin, str(message.from_user.username), rate)
-                db.db_add_rofl(str(message.from_user.username), db.casino_admin, rate)
-                bot.send_message(message.chat.id, db.get_one_user_stat_from_db('casino_admin'), parse_mode='HTML')
-                bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.from_user.username)), parse_mode='HTML')
+                if result_of_casino == 1 or result_of_casino == 2 or result_of_casino == 3 or result_of_casino == 4 or result_of_casino == 5:
+                    bot.send_message(message.chat.id, f'Ты проебал все! -{str(balance)} рофлов')
+                    bot.send_message(message.chat.id, f'СОСАТЬ! casino_admin +{str(balance)} рофлов')
+                    db.db_remove_rofl(db.casino_admin, str(message.from_user.username), balance)
+                    db.db_add_rofl(str(message.from_user.username), db.casino_admin, balance)
+                    bot.send_message(message.chat.id, db.get_one_user_stat_from_db('casino_admin'), parse_mode='HTML')
+                    bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.from_user.username)), parse_mode='HTML')
+                if result_of_casino == 6 or result_of_casino == 7 or result_of_casino == 8 or result_of_casino == 9 or result_of_casino == 10:
+                    bot.send_message(message.chat.id, f'Ты проебал жизнь! -{str(balance * 2)} рофлов')
+                    bot.send_message(message.chat.id, f'Твоя жизнь пренадлежит мне, еблан! casino_admin +{str(balance * 2)} рофлов')
+                    db.db_remove_rofl(db.casino_admin, str(message.from_user.username), balance * 2)
+                    db.db_add_rofl(str(message.from_user.username), db.casino_admin, balance * 2)
+                    bot.send_message(message.chat.id, db.get_one_user_stat_from_db('casino_admin'), parse_mode='HTML')
+                    bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.from_user.username)), parse_mode='HTML')
+                if result_of_casino in array_of_procents_win:
+                    bot.send_message(message.chat.id, f'Ты выиграл! +{str(rate)} рофлов')
+                    bot.send_message(message.chat.id, f'обокрал Казиныча на {str(rate)} рофлов')
+                    db.db_add_rofl(db.casino_admin, str(message.from_user.username), rate)
+                    db.db_remove_rofl(str(message.from_user.username), db.casino_admin, rate)
+                    bot.send_message(message.chat.id, db.get_one_user_stat_from_db('casino_admin'), parse_mode='HTML')
+                    bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.from_user.username)), parse_mode='HTML')
+                if result_of_casino in array_of_procents_lose:
+                    bot.send_message(message.chat.id, f'Ты проиграл! -{str(rate)} рофлов')
+                    bot.send_message(message.chat.id, f'Казиныч снова в выигрыше! casino_admin +{str(rate)} рофлов')
+                    db.db_remove_rofl(db.casino_admin, str(message.from_user.username), rate)
+                    db.db_add_rofl(str(message.from_user.username), db.casino_admin, rate)
+                    bot.send_message(message.chat.id, db.get_one_user_stat_from_db('casino_admin'), parse_mode='HTML')
+                    bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.from_user.username)), parse_mode='HTML')
 
-            db.db_upgrade_casino_time(str(message.from_user.username))
+                    db.db_upgrade_casino_time(str(message.from_user.username))
 
 
 
