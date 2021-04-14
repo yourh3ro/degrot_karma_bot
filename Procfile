@@ -1,3 +1,3 @@
-NEW_RELIC_CONFIG_FILE=newrelic.ini newrelic-admin run-program
+NEW_RELIC_CONFIG_FILE=newrelic.ini 
 web: python main.py
-worker: python main.py
+worker: newrelic-admin run-program python main.py
