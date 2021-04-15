@@ -115,7 +115,7 @@ def new_casino(message):
             if casino_action_succes_time > now_time:
                 time_to_casino = casino_action_succes_time - now_time
                 time_to_casino = str(time_to_casino)
-                bot.send_message(message.chat.id, f'РАНО БЛЯТЬ! Жди {time_to_casino}')
+                bot.send_message(message.chat.id, f'РАНО БЛЯТЬ! Жди еще {time_to_casino}')
             else:
                 bot.reply_to(message, "Кручу... Верчу... Наебать хочу!")
                 time.sleep(2)
