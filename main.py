@@ -111,10 +111,11 @@ def new_casino(message):
         balance = db.get_roflanbalance_from_db(str(message.from_user.username))
         if balance < rate:
             bot.send_message(message.chat.id, 'На что играть собрался? Не хватает рофлов')
+        else:
             if casino_action_succes_time > now_time:
                 time_to_casino = casino_action_succes_time - now_time
                 time_to_casino = str(time_to_casino)
-                bot.send_message(message.chat.id, f'РАНО БЛЯТЬ! жди {time_to_casino}')
+                bot.send_message(message.chat.id, f'РАНО БЛЯТЬ! Жди {time_to_casino}')
             else:
                 bot.reply_to(message, "Кручу... Верчу... Наебать хочу!")
                 time.sleep(2)
