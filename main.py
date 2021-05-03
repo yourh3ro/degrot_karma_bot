@@ -28,26 +28,20 @@ def add_rofl_when_reply(message):
         if message.from_user.username == message.reply_to_message.json['from']['username']:
             bot.reply_to(message, 'Сам себя плюсуешь? Думал наебать меня?')
         else:
-            balance = db.get_roflanbalance_from_db(str(message.from_user.username))
-            if balance < 1:
-                bot.reply_to(message, 'Не хватает рофлов! Бери пример, бомжара') 
+            random_rofl = randint(1,50)
+            if random_rofl == 1:
+                bot.send_message(message.chat.id, 'Еееееебать! МЕГАРОФЛ!')
+                bot.send_message(message.chat.id, '@' + message.from_user.username + ' дал МЕГАРОФЛ ' + '@' + message.reply_to_message.json['from']['username'])
+
+                db.db_add_rofl(str(message.from_user.username), str(message.reply_to_message.json['from']['username']), 5)
+
+                bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.reply_to_message.json['from']['username'])), parse_mode='HTML')
             else:
-                random_rofl = randint(1,50)
-                if random_rofl == 1:
-                    bot.send_message(message.chat.id, 'Еееееебать! МЕГАРОФЛ!')
-                    bot.send_message(message.chat.id, '@' + message.from_user.username + ' дал МЕГАРОФЛ ' + '@' + message.reply_to_message.json['from']['username'])
+                bot.send_message(message.chat.id, '@' + message.from_user.username + words.random_plus_words() + '@' + message.reply_to_message.json['from']['username'])
 
-                    db.db_add_rofl(str(message.from_user.username), str(message.reply_to_message.json['from']['username']), 5)
-                    db.db_remove_rofl(str(message.reply_to_message.json['from']['username']), str(message.from_user.username), 5)
+                db.db_add_rofl(str(message.from_user.username), str(message.reply_to_message.json['from']['username']), 1)
 
-                    bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.reply_to_message.json['from']['username'])), parse_mode='HTML')
-                else:
-                    bot.send_message(message.chat.id, '@' + message.from_user.username + words.random_plus_words() + '@' + message.reply_to_message.json['from']['username'])
-
-                    db.db_add_rofl(str(message.from_user.username), str(message.reply_to_message.json['from']['username']), 1)
-                    db.db_remove_rofl(str(message.reply_to_message.json['from']['username']), str(message.from_user.username), 1)
-
-                    bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.reply_to_message.json['from']['username'])), parse_mode='HTML')
+                bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.reply_to_message.json['from']['username'])), parse_mode='HTML')
 
 @bot.message_handler(regexp="^[-]")
 def remove_rofl_when_reply(message):
@@ -95,7 +89,7 @@ def new_casino(message):
 
     now_time = datetime.datetime.now()
     last_casino_action = db.db_get_casino_time(str(message.from_user.username))
-    casino_action_succes_time = last_casino_action + datetime.timedelta(minutes=1)
+    casino_action_succes_time = last_casino_action + datetime.timedelta(minutes=30)
 
     balance = db.get_roflanbalance_from_db(str(message.from_user.username))
 
@@ -110,27 +104,27 @@ def new_casino(message):
         bot.send_message(message.chat.id, f'РАНО БЛЯТЬ! Жди еще {time_to_casino}')
     else:
         mess_form_bot = bot.reply_to(message, "Кручу")
-        time.sleep(0.2)
+        time.sleep(0.4)
         bot.edit_message_text("Кручу.", message.chat.id, mess_form_bot.id)
-        time.sleep(0.2)
+        time.sleep(0.4)
         bot.edit_message_text("Кручу..", message.chat.id, mess_form_bot.id)
-        time.sleep(0.2)
+        time.sleep(0.4)
         bot.edit_message_text("Кручу...", message.chat.id, mess_form_bot.id)
-        time.sleep(0.2)
+        time.sleep(0.4)
         bot.edit_message_text("Кручу.", message.chat.id, mess_form_bot.id)
-        time.sleep(0.2)
+        time.sleep(0.4)
         bot.edit_message_text("Кручу..", message.chat.id, mess_form_bot.id)
-        time.sleep(0.2)
+        time.sleep(0.4)
         bot.edit_message_text("Кручу...", message.chat.id, mess_form_bot.id)
-        time.sleep(0.2)
+        time.sleep(0.4)
         bot.edit_message_text("Кручу... Верчу", message.chat.id, mess_form_bot.id)
-        time.sleep(0.2)
+        time.sleep(0.4)
         bot.edit_message_text("Кручу... Верчу.", message.chat.id, mess_form_bot.id)
-        time.sleep(0.2)
+        time.sleep(0.4)
         bot.edit_message_text("Кручу... Верчу..", message.chat.id, mess_form_bot.id)
-        time.sleep(0.2)
+        time.sleep(0.4)
         bot.edit_message_text("Кручу... Верчу...", message.chat.id, mess_form_bot.id)
-        time.sleep(0.2)
+        time.sleep(0.4)
         bot.edit_message_text("Кручу... Верчу... Наебать хочу!", message.chat.id, mess_form_bot.id)
 
         

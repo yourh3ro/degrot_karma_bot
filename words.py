@@ -38,10 +38,10 @@ def random_plus_words():
     elif randint == 5:
         rand_plus_words_result = ' плюсанул '
     elif randint == 6:
-        rand_plus_words_result = ' позитивнул '
+        rand_plus_words_result = ' дал рофлан '
     elif randint == 7:
         rand_plus_words_result = ' поддержал '
     elif randint == 8:
-        rand_plus_words_result = ' законтачил с '
+        rand_plus_words_result = ' дал рофл '
 
     return rand_plus_words_result
