@@ -138,7 +138,10 @@ def db_upgrade_casino_time(username):
 def db_get_rofl_time(username):
 
     cursor.execute(f"SELECT last_rofl_action FROM users WHERE username = '{username}'")
-    last_casino_action = cursor.fetchone()
+    last_rofl_action = cursor.fetchone()
+
+    last_rofl_action = last_rofl_action[0]
+    last_rofl_action = datetime.datetime.strptime(last_rofl_action, '%Y-%m-%d %H:%M:%S.%f')
 
     return last_rofl_action
 

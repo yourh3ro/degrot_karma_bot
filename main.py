@@ -24,9 +24,16 @@ def send_update(message):
 
 @bot.message_handler(regexp="^[+]")
 def add_rofl_when_reply(message):
+
+    now_time = datetime.datetime.now()
+    last_rofl_action = db.db_get_rofl_time(str(message.from_user.username))
+    last_rofl_action_succes_time = last_rofl_action + datetime.timedelta(minutes=3)
+
     if message.reply_to_message is not None:
         if message.from_user.username == message.reply_to_message.json['from']['username']:
             bot.reply_to(message, 'Сам себя плюсуешь? Думал наебать меня?')
+        elif last_rofl_action_succes_time > now_time:
+            bot.reply_to(message, 'Ты своего ебыря бустишь?')
         else:
             random_rofl = randint(1,50)
             if random_rofl == 1:
@@ -36,18 +43,29 @@ def add_rofl_when_reply(message):
                 db.db_add_rofl(str(message.from_user.username), str(message.reply_to_message.json['from']['username']), 5)
 
                 bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.reply_to_message.json['from']['username'])), parse_mode='HTML')
+
+                db.db_upgrade_rofl_time(message.from_user.username)
             else:
                 bot.send_message(message.chat.id, '@' + message.from_user.username + words.random_plus_words() + '@' + message.reply_to_message.json['from']['username'])
 
                 db.db_add_rofl(str(message.from_user.username), str(message.reply_to_message.json['from']['username']), 1)
 
                 bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.reply_to_message.json['from']['username'])), parse_mode='HTML')
+                
+                db.db_upgrade_rofl_time(message.from_user.username)
 
 @bot.message_handler(regexp="^[-]")
 def remove_rofl_when_reply(message):
+
+    now_time = datetime.datetime.now()
+    last_rofl_action = db.db_get_rofl_time(str(message.from_user.username))
+    last_rofl_action_succes_time = last_rofl_action + datetime.timedelta(minutes=3)
+
     if message.reply_to_message is not None:
         if message.from_user.username == message.reply_to_message.json['from']['username']:
             bot.reply_to(message, 'ХАХА тут долбаеб сам себе минусы ставит')
+        elif last_rofl_action_succes_time > now_time:
+            bot.reply_to(message, 'ЗАЕБАЛ ХВАТИТ')
         else:
             random_rofl = randint(1,50)
             if random_rofl == 1:
@@ -58,6 +76,8 @@ def remove_rofl_when_reply(message):
                 db.db_add_rofl(str(message.from_user.username), db.casino_admin, 5)
 
                 bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.reply_to_message.json['from']['username'])), parse_mode='HTML')
+
+                db.db_upgrade_rofl_time(message.from_user.username)
             elif random_rofl == 2:
                 bot.send_message(message.chat.id, 'ГУЧИ ЛИНЗЫ ОТРАЗИЛИ ХЕЙТ')
                 bot.send_message(message.chat.id,'@' + message.reply_to_message.json['from']['username'] + ' ОТРАЗИЛ ХЕЙТ ' + '@' + message.from_user.username)
@@ -66,6 +86,7 @@ def remove_rofl_when_reply(message):
                 db.db_add_rofl(str(message.from_user.username), db.casino_admin, 5)
 
                 bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.from_user.username)), parse_mode='HTML')
+                db.db_upgrade_rofl_time(message.from_user.username)
             else:
                 bot.send_message(message.chat.id, '@' + message.from_user.username + words.random_minus_words() + '@' + message.reply_to_message.json['from']['username'])
 
@@ -73,6 +94,7 @@ def remove_rofl_when_reply(message):
                 db.db_add_rofl(str(message.from_user.username), db.casino_admin, 1)
 
                 bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.reply_to_message.json['from']['username'])), parse_mode='HTML')
+                db.db_upgrade_rofl_time(message.from_user.username)
     
 @bot.message_handler(regexp="дай[\s]рофл")
 def bomj(message):
@@ -104,27 +126,20 @@ def new_casino(message):
         bot.send_message(message.chat.id, f'РАНО БЛЯТЬ! Жди еще {time_to_casino}')
     else:
         mess_form_bot = bot.reply_to(message, "Кручу")
-        time.sleep(0.4)
+        time.sleep(1)
         bot.edit_message_text("Кручу.", message.chat.id, mess_form_bot.id)
-        time.sleep(0.4)
+        time.sleep(1)
         bot.edit_message_text("Кручу..", message.chat.id, mess_form_bot.id)
-        time.sleep(0.4)
+        time.sleep(1)
         bot.edit_message_text("Кручу...", message.chat.id, mess_form_bot.id)
-        time.sleep(0.4)
+        time.sleep(1)
         bot.edit_message_text("Кручу.", message.chat.id, mess_form_bot.id)
-        time.sleep(0.4)
+        time.sleep(1)
         bot.edit_message_text("Кручу..", message.chat.id, mess_form_bot.id)
-        time.sleep(0.4)
+        time.sleep(1)
         bot.edit_message_text("Кручу...", message.chat.id, mess_form_bot.id)
-        time.sleep(0.4)
-        bot.edit_message_text("Кручу... Верчу", message.chat.id, mess_form_bot.id)
-        time.sleep(0.4)
-        bot.edit_message_text("Кручу... Верчу.", message.chat.id, mess_form_bot.id)
-        time.sleep(0.4)
-        bot.edit_message_text("Кручу... Верчу..", message.chat.id, mess_form_bot.id)
-        time.sleep(0.4)
         bot.edit_message_text("Кручу... Верчу...", message.chat.id, mess_form_bot.id)
-        time.sleep(0.4)
+        time.sleep(1)
         bot.edit_message_text("Кручу... Верчу... Наебать хочу!", message.chat.id, mess_form_bot.id)
 
         
