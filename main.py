@@ -9,10 +9,15 @@ import words
 TOKEN = '1710589285:AAGPBaALjUILIyaRh39K-sushILAETlz8G8'
 
 bot = telebot.TeleBot(TOKEN)
+bot.remove_webhook()
 
 @bot.message_handler(commands=['balance'])
 def send_users_stat(message):
 	bot.reply_to(message, db.get_users_stat_from_db(), parse_mode='HTML')
+
+@bot.message_handler(commands=['mybalance'])
+def send_user_stat(message):
+    bot.reply_to(message, db.get_one_user_stat_from_db(message.from_user.username), parse_mode='HTML')
 
 @bot.message_handler(commands=['azino777', 'cazino', 'cazino777', 'casino777', 'kazino', 'kasino', 'казино', 'Казино', 'Казино777', 'казино777'])
 def send_to_maiorchik(message):
@@ -40,7 +45,7 @@ def add_rofl_when_reply(message):
                 bot.send_message(message.chat.id, 'Еееееебать! МЕГАРОФЛ!')
                 bot.send_message(message.chat.id, '@' + message.from_user.username + ' дал МЕГАРОФЛ ' + '@' + message.reply_to_message.json['from']['username'])
 
-                db.db_add_rofl(str(message.from_user.username), str(message.reply_to_message.json['from']['username']), 5)
+                db.db_add_rofl(str(message.from_user.username), str(message.reply_to_message.json['from']['username']), (db.roflan_coef(message.from_user.username))*2)
 
                 bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.reply_to_message.json['from']['username'])), parse_mode='HTML')
 
@@ -48,7 +53,7 @@ def add_rofl_when_reply(message):
             else:
                 bot.send_message(message.chat.id, '@' + message.from_user.username + words.random_plus_words() + '@' + message.reply_to_message.json['from']['username'])
 
-                db.db_add_rofl(str(message.from_user.username), str(message.reply_to_message.json['from']['username']), 1)
+                db.db_add_rofl(str(message.from_user.username), str(message.reply_to_message.json['from']['username']), db.roflan_coef(message.from_user.username))
 
                 bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.reply_to_message.json['from']['username'])), parse_mode='HTML')
                 
@@ -72,8 +77,8 @@ def remove_rofl_when_reply(message):
                 bot.send_message(message.chat.id, 'Еееееебать! МЕГАМИНУС!')
                 bot.send_message(message.chat.id, '@' + message.from_user.username + ' залил МЕГАМИНУС ' + '@' + message.reply_to_message.json['from']['username'])
 
-                db.db_remove_rofl(str(message.from_user.username), str(message.reply_to_message.json['from']['username']), 5)
-                db.db_add_rofl(str(message.from_user.username), db.casino_admin, 5)
+                db.db_remove_rofl(str(message.from_user.username), str(message.reply_to_message.json['from']['username']), db.roflan_coef(message.from_user.username)*2)
+                db.db_add_rofl(str(message.from_user.username), db.casino_admin, db.roflan_coef(message.from_user.username)*2)
 
                 bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.reply_to_message.json['from']['username'])), parse_mode='HTML')
 
@@ -82,16 +87,16 @@ def remove_rofl_when_reply(message):
                 bot.send_message(message.chat.id, 'ГУЧИ ЛИНЗЫ ОТРАЗИЛИ ХЕЙТ')
                 bot.send_message(message.chat.id,'@' + message.reply_to_message.json['from']['username'] + ' ОТРАЗИЛ ХЕЙТ ' + '@' + message.from_user.username)
 
-                db.db_remove_rofl(str(message.reply_to_message.json['from']['username']), str(message.from_user.username), 5)
-                db.db_add_rofl(str(message.from_user.username), db.casino_admin, 5)
+                db.db_remove_rofl(str(message.reply_to_message.json['from']['username']), str(message.from_user.username), db.roflan_coef(message.from_user.username)*2)
+                db.db_add_rofl(str(message.from_user.username), db.casino_admin, db.roflan_coef(message.from_user.username)*2)
 
                 bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.from_user.username)), parse_mode='HTML')
                 db.db_upgrade_rofl_time(message.from_user.username)
             else:
                 bot.send_message(message.chat.id, '@' + message.from_user.username + words.random_minus_words() + '@' + message.reply_to_message.json['from']['username'])
 
-                db.db_remove_rofl(str(message.from_user.username), str(message.reply_to_message.json['from']['username']), 1)
-                db.db_add_rofl(str(message.from_user.username), db.casino_admin, 1)
+                db.db_remove_rofl(str(message.from_user.username), str(message.reply_to_message.json['from']['username']), db.roflan_coef(message.from_user.username))
+                db.db_add_rofl(str(message.from_user.username), db.casino_admin, db.roflan_coef(message.from_user.username))
 
                 bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.reply_to_message.json['from']['username'])), parse_mode='HTML')
                 db.db_upgrade_rofl_time(message.from_user.username)
@@ -197,5 +202,5 @@ if __name__ == '__main__':
     функция реагирования на событие улетания в минус рофлов пользователя
     рофлокредит
     запилить ранги
-    DELAY НА СООБЗЩЕНИЯ
+    СКОЛЬКО РОФЛОВ ВООБЩЕ ДАЛ ИЛИ ЗАБРАЛ?
     """

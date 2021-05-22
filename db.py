@@ -68,7 +68,6 @@ def get_roflanbalance_from_db(username):
     
     return balance
 
-
 def db_add_rofl(from_user, to_user, count):
 
     # проверяем, что user есть в БД. Если нету, добавляем
@@ -154,3 +153,12 @@ def db_get_casino_time(username):
     last_casino_action = datetime.datetime.strptime(last_casino_action, '%Y-%m-%d %H:%M:%S.%f')
 
     return last_casino_action
+
+def roflan_coef(username):
+    user_balance = get_roflanbalance_from_db(username)
+    if user_balance <= 0:
+        coef = 1
+        return coef
+    else:
+        coef = user_balance // 10
+        return coef
