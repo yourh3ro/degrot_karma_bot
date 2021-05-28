@@ -105,16 +105,6 @@ def remove_rofl_when_reply(message):
 
                 bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.reply_to_message.json['from']['username'])), parse_mode='HTML')
                 db.db_upgrade_rofl_time(message.from_user.username)
-    
-@bot.message_handler(regexp="дай[\s]рофл")
-def bomj(message):
-    randfraza = randint(1,3)
-    if randfraza == 1:
-        bot.reply_to(message, "Бомжара ебаная")
-    if randfraza == 2:
-        bot.reply_to(message, "А пососать не завернуть?")
-    if randfraza == 3:
-        bot.reply_to(message, "Еще чего?")
 
 @bot.message_handler(regexp="casino [0-9]*")
 def new_casino(message):
