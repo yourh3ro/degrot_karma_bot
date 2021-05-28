@@ -43,7 +43,8 @@ def add_rofl_when_reply(message):
             random_rofl = randint(1,50)
             if random_rofl == 1:
                 bot.send_message(message.chat.id, 'Еееееебать! МЕГАРОФЛ!')
-                bot.send_message(message.chat.id, '@' + message.from_user.username + ' дал МЕГАРОФЛ ' + '@' + message.reply_to_message.json['from']['username'])
+                bot.send_message(message.chat.id, f'@' + message.from_user.username + ' дал МЕГАРОФЛ ' + '@' + message.reply_to_message.json['from']['username'] + '!' \
+                     + ' +' + str((db.roflan_coef(message.from_user.username)*2)) + ' рофлов!')
 
                 db.db_add_rofl(str(message.from_user.username), str(message.reply_to_message.json['from']['username']), (db.roflan_coef(message.from_user.username))*2)
 
@@ -51,7 +52,8 @@ def add_rofl_when_reply(message):
 
                 db.db_upgrade_rofl_time(message.from_user.username)
             else:
-                bot.send_message(message.chat.id, '@' + message.from_user.username + words.random_plus_words() + '@' + message.reply_to_message.json['from']['username'])
+                bot.send_message(message.chat.id, '@' + message.from_user.username + words.random_plus_words() + '@' + message.reply_to_message.json['from']['username'] + '!' \
+                    + ' +' + str(db.roflan_coef(message.from_user.username)) + ' рофлов!')
 
                 db.db_add_rofl(str(message.from_user.username), str(message.reply_to_message.json['from']['username']), db.roflan_coef(message.from_user.username))
 
@@ -75,7 +77,8 @@ def remove_rofl_when_reply(message):
             random_rofl = randint(1,50)
             if random_rofl == 1:
                 bot.send_message(message.chat.id, 'Еееееебать! МЕГАМИНУС!')
-                bot.send_message(message.chat.id, '@' + message.from_user.username + ' залил МЕГАМИНУС ' + '@' + message.reply_to_message.json['from']['username'])
+                bot.send_message(message.chat.id, '@' + message.from_user.username + ' залил МЕГАМИНУС ' + '@' + message.reply_to_message.json['from']['username'] + '!' \
+                    ' -' + str((db.roflan_coef(message.from_user.username)*2)) + ' рофлов!')
 
                 db.db_remove_rofl(str(message.from_user.username), str(message.reply_to_message.json['from']['username']), db.roflan_coef(message.from_user.username)*2)
                 db.db_add_rofl(str(message.from_user.username), db.casino_admin, db.roflan_coef(message.from_user.username)*2)
@@ -85,7 +88,8 @@ def remove_rofl_when_reply(message):
                 db.db_upgrade_rofl_time(message.from_user.username)
             elif random_rofl == 2:
                 bot.send_message(message.chat.id, 'ГУЧИ ЛИНЗЫ ОТРАЗИЛИ ХЕЙТ')
-                bot.send_message(message.chat.id,'@' + message.reply_to_message.json['from']['username'] + ' ОТРАЗИЛ ХЕЙТ ' + '@' + message.from_user.username)
+                bot.send_message(message.chat.id,'@' + message.reply_to_message.json['from']['username'] + ' ОТРАЗИЛ ХЕЙТ ' + '@' + message.from_user.username + '!' \
+                    ' -' + str((db.roflan_coef(message.from_user.username)*2)) + ' рофлов!')
 
                 db.db_remove_rofl(str(message.reply_to_message.json['from']['username']), str(message.from_user.username), db.roflan_coef(message.from_user.username)*2)
                 db.db_add_rofl(str(message.from_user.username), db.casino_admin, db.roflan_coef(message.from_user.username)*2)
@@ -93,7 +97,8 @@ def remove_rofl_when_reply(message):
                 bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.from_user.username)), parse_mode='HTML')
                 db.db_upgrade_rofl_time(message.from_user.username)
             else:
-                bot.send_message(message.chat.id, '@' + message.from_user.username + words.random_minus_words() + '@' + message.reply_to_message.json['from']['username'])
+                bot.send_message(message.chat.id, '@' + message.from_user.username + words.random_minus_words() + '@' + message.reply_to_message.json['from']['username'] + ' !' \
+                    ' -' + str(db.roflan_coef(message.from_user.username)) + ' рофлов!')
 
                 db.db_remove_rofl(str(message.from_user.username), str(message.reply_to_message.json['from']['username']), db.roflan_coef(message.from_user.username))
                 db.db_add_rofl(str(message.from_user.username), db.casino_admin, db.roflan_coef(message.from_user.username))
