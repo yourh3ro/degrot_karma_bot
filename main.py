@@ -142,7 +142,6 @@ def new_casino(message):
         time.sleep(1)
         bot.edit_message_text("Кручу... Верчу... Наебать хочу!", message.chat.id, mess_form_bot.id)
 
-        
         time.sleep(1)
         result_of_casino = randint(1,100)
         roflan_count = rate
@@ -150,7 +149,7 @@ def new_casino(message):
         array_of_procents_lose = []
         array_of_procents_win = []
 
-        i = 10
+        i = 6
         while i <= 40:
             array_of_procents_lose.append(i)
             i = i + 1
@@ -160,12 +159,12 @@ def new_casino(message):
             array_of_procents_win.append(q)
             q = q + 1
 
-        if result_of_casino == 1 or result_of_casino == 2 or result_of_casino == 3 or result_of_casino == 4 or result_of_casino == 5:
+        if result_of_casino == 1 or result_of_casino == 2 or result_of_casino == 3:
             bot.send_message(message.chat.id, f'Ты проебал все! -{str(balance)} рофлов! СОСАТЬ!')
             db.db_remove_rofl(db.casino_admin, str(message.from_user.username), balance)
             db.db_add_rofl(str(message.from_user.username), db.casino_admin, balance)
             bot.send_message(message.chat.id, db.get_one_user_stat_from_db(str(message.from_user.username)), parse_mode='HTML')
-        if result_of_casino == 6 or result_of_casino == 7 or result_of_casino == 8 or result_of_casino == 9 or result_of_casino == 10:
+        if result_of_casino == 4 or result_of_casino == 5 or result_of_casino == 6:
             bot.send_message(message.chat.id, f'Ты проебал жизнь! -{str(balance * 2)} рофлов! Твоя жизнь пренадлежит мне, еблан!')
             db.db_remove_rofl(db.casino_admin, str(message.from_user.username), balance * 2)
             db.db_add_rofl(str(message.from_user.username), db.casino_admin, balance * 2)
@@ -192,10 +191,8 @@ if __name__ == '__main__':
     """
     TODO: 
     Удаление кучи сообщений из козиныча(?) по таймауту
-    функция реагирования на сообщения "дай рофл" "дайте рофл" и т.д ДОПИСАТЬ
     вести бомжей в БД
     функция реагирования на событие улетания в минус рофлов пользователя
     рофлокредит
     запилить ранги
-    СКОЛЬКО РОФЛОВ ВООБЩЕ ДАЛ ИЛИ ЗАБРАЛ?
     """
